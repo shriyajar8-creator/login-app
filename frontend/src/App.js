@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/dashboard";
 import Signup from "./pages/Signup";
@@ -22,14 +22,12 @@ import { store } from "./store";
 function AppContent() {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const userRole = localStorage.getItem("userRole") || "employee";
-  const location = useLocation();
-  const [sidebarWidth, setSidebarWidth] = useState(280);
 
   return (
     <>
       {isLoggedIn && <Navbar />}
       <div style={{ display: "flex", paddingTop: isLoggedIn ? "0px" : 0 }}>
-        {isLoggedIn && <Sidebar onWidthChange={setSidebarWidth} />}
+        {isLoggedIn && <Sidebar />}
         <div style={{ flex: 1, marginLeft: isLoggedIn ? "280px" : 0, transition: "margin-left 0.3s ease" }}>
           <Routes>
             <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Landing />} />
@@ -43,7 +41,7 @@ function AppContent() {
             <Route path="/reports" element={<ProtectedRoute>{userRole === "admin" || userRole === "manager" ? <Reports /> : <Navigate to="/dashboard" />}</ProtectedRoute>} />
             <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-             <Route path="/admin" element={<ProtectedRoute>{userRole === "admin" ? <Admin /> : <Navigate to="/dashboard" />}</ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute>{userRole === "admin" ? <Admin /> : <Navigate to="/dashboard" />}</ProtectedRoute>} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-sent" element={<ResetSent />} />
           </Routes>
@@ -64,4 +62,3 @@ function App() {
 }
 
 export default App;
-

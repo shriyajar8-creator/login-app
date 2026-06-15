@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
@@ -11,8 +10,6 @@ function Signup() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignup = async () => {
-    console.log("BUTTON WORKING");
-
     if (!name || !email || !password) {
       alert("Please fill all fields");
       return;
@@ -42,7 +39,7 @@ function Signup() {
         alert(response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       alert("Server Error");
     }
   };

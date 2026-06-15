@@ -3,17 +3,13 @@ import api from "../utils/api";
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const fetchNotifications = async () => {
     try {
-      setLoading(true);
       const { data } = await api.get("/api/notifications");
       if (data.success) setNotifications(data.notifications);
     } catch (e) {
       console.error(e);
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees, createEmployee } from "../store/employeesSlice";
 
@@ -74,10 +73,12 @@ export default function Employees() {
             <input name="designation" placeholder="Designation" value={form.designation} onChange={handleChange} style={{ padding: 10, borderRadius: 8, border: "1px solid #e2e8f0" }} />
             <input name="skills" placeholder="Skills (comma separated)" value={form.skills} onChange={handleChange} style={{ padding: 10, borderRadius: 8, border: "1px solid #e2e8f0", gridColumn: "1 / -1" }} />
             <input name="qualifications" placeholder='Qualifications JSON (e.g. {"degree":"B.Tech","year":2021})' value={form.qualifications} onChange={handleChange} style={{ padding: 10, borderRadius: 8, border: "1px solid #e2e8f0", gridColumn: "1 / -1" }} />
+            <div>
+              <button type="submit" disabled={loading} style={{ marginTop: 12, padding: 10, backgroundColor: "#0f766e", color: "white", border: "none", borderRadius: 8 }}>
+                {loading ? "Saving..." : "Add Employee"}
+              </button>
+            </div>
           </div>
-          <button type="submit" disabled={loading} style={{ marginTop: 12, padding: 10, backgroundColor: "#0f766e", color: "white", border: "none", borderRadius: 8 }}>
-            {loading ? "Saving..." : "Add Employee"}
-          </button>
         </form>
       )}
 
@@ -109,7 +110,7 @@ export default function Employees() {
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan="6" style={{ padding: 20, textAlign: "center", color: "#94a3b8" }}>No employees found</td>
-                </tr>
+              </tr>
               )}
             </tbody>
           </table>
@@ -125,4 +126,3 @@ export default function Employees() {
     </div>
   );
 }
-

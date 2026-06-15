@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "../utils/api";
 
 function Assets() {
@@ -11,15 +11,6 @@ function Assets() {
   const [returningId, setReturningId] = useState(null);
   const userRole = localStorage.getItem("userRole") || "employee";
 
-  const fetchAssets = async () => {
-    try {
-      const res = await api.get("/api/assets", { params: { status: statusFilter || undefined } });
-      if (res.data.success) setAssets(res.data.assets);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const fetchEmployees = async () => {
     try {
       const res = await api.get("/api/employees");
@@ -29,10 +20,22 @@ function Assets() {
     }
   };
 
+  const fetchAssets = useCallback(async () => {
+    try {
+      const res = await api.get("/api/assets", { params: { status: statusFilter || undefined } });
+      if (res.data.success) setAssets(res.data.assets);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [statusFilter]);
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []); // fetch employees once on mount
+
   useEffect(() => {
     fetchAssets();
-    fetchEmployees();
-  }, [statusFilter]);
+  }, [fetchAssets]); // refetch assets when statusFilter changes
 
   const handleCreate = async (e) => {
     e.preventDefault();
