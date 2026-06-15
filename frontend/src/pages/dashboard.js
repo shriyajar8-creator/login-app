@@ -65,12 +65,6 @@ function Dashboard() {
 
   const recentEmployees = employees.slice(0, 8);
   const recentLeaves = leaves.slice(0, 5);
-
-  const departmentCounts = employees.reduce((acc, emp) => {
-    const dept = emp.department || "Other";
-    acc[dept] = (acc[dept] || 0) + 1;
-    return acc;
-  }, {}); 
   const StatCard = ({ title, value, subtitle, icon, color, onClick }) => (
     <div
       onClick={onClick}
