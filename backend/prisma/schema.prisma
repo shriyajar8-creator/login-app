@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int         @id @default(autoincrement())
+  name          String
+  email         String      @unique
+  password      String
+  role          String      @default("employee")
+  avatar        String?
+  department    String?
+  phone         String?
+  address       String?
+  status        String      @default("active")
+  lastLogin     DateTime?
+  createdAssets Asset[]      @relation("AssetCreator")
+  notifications Notification[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Employee {
+  id          Int       @id @default(autoincrement())
+  employeeId  String    @unique
+  name        String
+  email       String    @unique
+  department  String?
+  designation String?
+  phone       String?
+  address     String?
+  dateOfBirth DateTime?
+  joinDate    DateTime  @default(now())
+  status      String    @default("active")
+  skills      Json?
+  qualifications Json?
+  assets      Asset[]
+  leaves      Leave[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Leave {
+  id              Int       @id @default(autoincrement())
+  employee        Employee  @relation(fields: [employeeId], references: [id])
+  employeeId      Int
+  leaveType       String
+  startDate       DateTime
+  endDate         DateTime
+  reason          String?
+  status          String    @default("pending")
+  approvedBy      String?
+  approvedAt      DateTime?
+  rejectedBy      String?
+  rejectedAt      DateTime?
+  rejectionReason String?
+  requestedAt     DateTime  @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Asset {
+  id            Int       @id @default(autoincrement())
+  name          String
+  type          String
+  serialNumber  String    @unique
+  model         String?
+  purchaseDate  DateTime?
+  warranty      String?
+  value         Float?
+  assignedTo    Employee? @relation(fields: [assignedToId], references: [id])
+  assignedToId  Int?
+  status        String    @default("available")
+  issuedAt      DateTime?
+  returnedAt    DateTime?
+  notes         String?
+  createdAtById Int?
+  createdBy     User?     @relation("AssetCreator", fields: [createdAtById], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Department {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  head        String?
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      String   @default("info")
+  read      Boolean  @default(false)
+  data      Json?
+  createdAt DateTime  @default(now())
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  model     String
+  recordId  Int
+  action    String
+  before    Json?
+  after     Json?
+  changedBy String
+  createdAt DateTime @default(now())
+}
