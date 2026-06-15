@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 
@@ -70,21 +70,7 @@ function Dashboard() {
     const dept = emp.department || "Other";
     acc[dept] = (acc[dept] || 0) + 1;
     return acc;
-  }, {});
-  const departmentEntries = Object.entries(departmentCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
-  const maxDeptCount = Math.max(...departmentEntries.map(([, count]) => count), 1);
-
-  const leaveStatusCounts = {
-    pending: leaves.filter(l => l.status === "pending").length,
-    approved: leaves.filter(l => l.status === "approved").length,
-    rejected: leaves.filter(l => l.status === "rejected").length,
-  };
-
-  const assetStatusCounts = {
-    available: assets.filter(a => a.status === "available").length,
-    assigned: assets.filter(a => a.status === "assigned").length,
-  };
-
+  }, {}); 
   const StatCard = ({ title, value, subtitle, icon, color, onClick }) => (
     <div
       onClick={onClick}
@@ -124,12 +110,6 @@ function Dashboard() {
       </div>
     </div>
   );
-
-  const totalRequests = leaves.length;
-  const pending = leaves.filter((leave) => leave.status === "pending").length;
-  const approved = leaves.filter((leave) => leave.status === "approved").length;
-  const rejected = leaves.filter((leave) => leave.status === "rejected").length;
-
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f8fafc", padding: "30px 20px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
